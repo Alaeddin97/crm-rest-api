@@ -8,44 +8,27 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CustomerRestExceptionHandler {
 
-	// Add an exception handler for CustomerNotFoundException
-	
 	@ExceptionHandler
-	public ResponseEntity<CustomerErrorResponse> handleException(CustomerNotFoundException exc) {
+	public ResponseEntity<CustomerResponseError>handleException(CustomerNotFoundException exc){
 		
-		// create CustomerErrorResponse
-		
-		CustomerErrorResponse error = new CustomerErrorResponse(
-											HttpStatus.NOT_FOUND.value(),
-											exc.getMessage(),
-											System.currentTimeMillis());
-		
-		// return ResponseEntity
-		
-		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		CustomerResponseError error=new CustomerResponseError();
+		error.setMessage(exc.getMessage());
+		error.setStatus(HttpStatus.NOT_FOUND.value());
+		error.setTimeStamp(System.currentTimeMillis());
+				
+		return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
 	}
 	
-	
-	// Add another exception handler ... to catch any exception (catch all)
 
 	@ExceptionHandler
-	public ResponseEntity<CustomerErrorResponse> handleException(Exception exc) {
+	public ResponseEntity<CustomerResponseError>handleAnyException(Exception exc){
 		
-		// create CustomerErrorResponse
-		
-		CustomerErrorResponse error = new CustomerErrorResponse(
-											HttpStatus.BAD_REQUEST.value(),
-											exc.getMessage(),
-											System.currentTimeMillis());
-		
-		// return ResponseEntity
-		
-		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+		CustomerResponseError error=new CustomerResponseError();
+		error.setMessage(exc.getMessage());
+		error.setStatus(HttpStatus.NOT_FOUND.value());
+		error.setTimeStamp(System.currentTimeMillis());
+				
+		return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
 	}
 	
 }
-
-
-
-
-

@@ -1,6 +1,9 @@
 package com.luv2code.springdemo.rest;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,83 +21,50 @@ import com.luv2code.springdemo.service.CustomerService;
 @RestController
 @RequestMapping("/api")
 public class CustomerRestController {
-
-	// autowire the CustomerService
+	
+	private List<Customer>customers;
+	
 	@Autowired
 	private CustomerService customerService;
 	
-	// add mapping for GET /customers
+	@PostConstruct
 	@GetMapping("/customers")
-	public List<Customer> getCustomers() {
-		
-		return customerService.getCustomers();
-		
+	public List<Customer>customers(){
+		customers=new ArrayList<Customer>();
+		customers=customerService.getCustomers();
+		return customers;
 	}
-	
-	// add mapping for GET /customers/{customerId}
-	
 	@GetMapping("/customers/{customerId}")
-	public Customer getCustomer(@PathVariable int customerId) {
-		
-		Customer theCustomer = customerService.getCustomer(customerId);
-		
-		if (theCustomer == null) {
-			throw new CustomerNotFoundException("Customer id not found - " + customerId);
+	public Customer customer(@PathVariable int customerId) {
+		if(customerId>=customers.size()||customerId<0) {
+			throw new CustomerNotFoundException("Customer not found id -"+customerId);
 		}
-		
-		return theCustomer;
+		return customers.get(customerId-1);
 	}
-	
-	// add mapping for POST /customers  - add new customer
-	
 	@PostMapping("/customers")
-	public Customer addCustomer(@RequestBody Customer theCustomer) {
-		
-		// also just in case the pass an id in JSON ... set id to 0
-		// this is force a save of new item ... instead of update
-		
-		theCustomer.setId(0);
-		
-		customerService.saveCustomer(theCustomer);
-		
-		return theCustomer;
+	public Customer addCustomer(@RequestBody() Customer customer) {
+		customer.setId(0);
+		customerService.saveCustomer(customer);
+		return customer;
 	}
-	
-	// add mapping for PUT /customers - update existing customer
-	
 	@PutMapping("/customers")
-	public Customer updateCustomer(@RequestBody Customer theCustomer) {
-		
-		customerService.saveCustomer(theCustomer);
-		
-		return theCustomer;
-		
+	public Customer updateCustomer(@RequestBody()Customer customer) {
+		customerService.saveCustomer(customer);
+		return customer;
 	}
-	
-	// add mapping for DELETE /customers/{customerId} - delete customer
 	
 	@DeleteMapping("/customers/{customerId}")
 	public String deleteCustomer(@PathVariable int customerId) {
-		
-		Customer tempCustomer = customerService.getCustomer(customerId);
-		
-		// throw exception if null
-		
-		if (tempCustomer == null) {
-			throw new CustomerNotFoundException("Customer id not found - " + customerId);
+		Customer theCustomer=customerService.getCustomer(customerId);
+		if(theCustomer==null) {
+			throw new CustomerNotFoundException("Customer not found id - "+customerId);
 		}
-				
 		customerService.deleteCustomer(customerId);
 		
-		return "Deleted customer id - " + customerId;
+		return "Customer has been deleted id-customer-"+customerId;
 	}
 	
 }
-
-
-
-
-
 
 
 
