@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.luv2code.springdemo</groupId>
@@ -9,6 +8,7 @@
 
 	<properties>
 		<springframework.version>5.0.17.RELEASE</springframework.version>
+		<springsecurity.version>5.0.5.RELEASE</springsecurity.version>
 		<hibernate.version>5.4.1.Final</hibernate.version>
 		<mysql.connector.version>8.0.16</mysql.connector.version>
 		<c3po.version>0.9.5.4</c3po.version>
@@ -31,11 +31,23 @@
 			<artifactId>spring-tx</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${springframework.version}</version>
+		</dependency>
+		<!-- Spring Security -->
+		<!-- spring-security-web and spring-security-config -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${springsecurity.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${springsecurity.version}</version>
 		</dependency>
 
 		<!-- Add Jackson for JSON converters -->
@@ -81,18 +93,16 @@
 
 		<!-- to compensate for java 9+ not including jaxb -->
 		<dependency>
-		    <groupId>javax.xml.bind</groupId>
-		    <artifactId>jaxb-api</artifactId>
-		    <version>2.3.0</version>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.0</version>
 		</dependency>
-		
 		<!-- to avoid the postConstruct annotation error -->
 		<dependency>
 			<groupId>javax.annotation</groupId>
 			<artifactId>javax.annotation-api</artifactId>
 			<version>1.3.2</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
